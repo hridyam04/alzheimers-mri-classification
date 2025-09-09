@@ -10,3 +10,4 @@ torchaudio
 transformers
 opencv-python
 nibabel
+keras
