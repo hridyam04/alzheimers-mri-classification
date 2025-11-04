@@ -12,7 +12,7 @@ MODEL_PATH = os.path.join(MODEL_DIR, "alzheimers_cnn_lstm.h5")
 
 def train_model():
     # 1. Load data
-    print("📂 Loading data...")
+    print(" Loading data...")
     data_dir = r"C:\Users\ASUS\Downloads\ADNI_preprocessed"  
     X_train, X_val, y_train, y_val = load_data_sequences(data_dir)
 
@@ -25,7 +25,7 @@ def train_model():
     early_stop = EarlyStopping(monitor="val_loss", patience=5, restore_best_weights=True, verbose=1)
 
     # 4. Train
-    print("🚀 Starting training...")
+    print(" Starting training...")
     history = model.fit(
         X_train, y_train,
         validation_data=(X_val, y_val),
@@ -38,7 +38,7 @@ def train_model():
 
     # 5. Save model
     model.save(MODEL_PATH)
-    print(f"✅ Model saved at {MODEL_PATH}")
+    print(f" Model saved at {MODEL_PATH}")
 
     # 6. Plot training curves
     plt.figure(figsize=(10,4))

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alzheimer's MRI Classification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            display: none;
+        }
+        .success {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+        }
+        .error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+        #loading {
+            display: none;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Alzheimer's MRI Classification</h1>
+    <div class="container">
+        <h2>Upload MRI Image</h2>
+        <form id="upload-form">
+            <input type="file" id="file-input" accept="image/*" required>
+            <br><br>
+            <button type="submit">Analyze Image</button>
+        </form>
+        <div id="loading">Processing...</div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').onsubmit = function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const fileInput = document.getElementById('file-input');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            
+            formData.append('file', fileInput.files[0]);
+            
+            // Show loading
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                result.style.display = 'block';
+                
+                if (data.error) {
+                    result.className = 'error';
+                    result.textContent = 'Error: ' + data.error;
+                } else {
+                    result.className = 'success';
+                    result.innerHTML = `
+                        <h3>Results:</h3>
+                        <p>Prediction: ${data.prediction}</p>
+                        <p>Confidence: ${data.confidence}</p>
+                    `;
+                }
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                result.style.display = 'block';
+                result.className = 'error';
+                result.textContent = 'Error: ' + error.message;
+            });
+        };
+    </script>
+</body>
+</html>

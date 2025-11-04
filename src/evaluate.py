@@ -9,29 +9,29 @@ from data_loader import load_data_sequences  # same function used in training
 # --- Paths ---
 MODEL_DIR = "models"
 MODEL_PATH = os.path.join(MODEL_DIR, "alzheimers_cnn_lstm.h5")
-DATA_DIR = r"C:\Users\ASUS\Downloads\ADNI_preprocessed"  # same as train.py
+DATA_DIR = r"C:\Users\ASUS\Downloads\ADNI_preprocessed"  
 
 def evaluate_model():
-    print("📂 Loading validation/test data...")
+    print(" Loading validation/test data...")
     _, X_val, _, y_val = load_data_sequences(DATA_DIR)
 
-    print("🧠 Loading trained model...")
+    print("Loading trained model...")
     model = tf.keras.models.load_model(MODEL_PATH)
 
     # Evaluate
-    print("\n📊 Evaluating model on validation data...")
+    print("\n Evaluating model on validation data...")
     loss, acc = model.evaluate(X_val, y_val, verbose=1)
     print(f"\n✅ Validation Accuracy: {acc*100:.2f}%")
-    print(f"📉 Validation Loss: {loss:.4f}")
+    print(f" Validation Loss: {loss:.4f}")
 
     # Predictions
-    print("\n🔍 Generating predictions...")
+    print("\n Generating predictions...")
     y_pred = model.predict(X_val)
     y_true_classes = np.argmax(y_val, axis=1)
     y_pred_classes = np.argmax(y_pred, axis=1)
 
     # --- Classification report ---
-    print("\n📋 Classification Report:")
+    print("\n Classification Report:")
     target_names = ["CN", "MCI", "AD"]
     print(classification_report(y_true_classes, y_pred_classes, target_names=target_names))
 
@@ -47,7 +47,7 @@ def evaluate_model():
     plt.savefig(os.path.join(MODEL_DIR, "confusion_matrix.png"))
     plt.show()
 
-    print(f"📈 Confusion matrix saved at {os.path.join(MODEL_DIR, 'confusion_matrix.png')}")
+    print(f" Confusion matrix saved at {os.path.join(MODEL_DIR, 'confusion_matrix.png')}")
 
 if __name__ == "__main__":
     evaluate_model()
